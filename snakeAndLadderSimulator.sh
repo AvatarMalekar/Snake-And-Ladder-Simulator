@@ -5,8 +5,8 @@ for (( i=1; i<=100; i++ ))
 do
    snakeAndLadderArray[i]=0;
 done
-playerPosition=0
-var=0
+player1Position=0
+player2Position=0
 counterForDiceTossed=0
 snakeAndLadderArray[1]=38;
 snakeAndLadderArray[4]=14;
@@ -34,58 +34,64 @@ function rollDie(){
 function snakeOrLadderOrNoPlay()
 {
 	for (( i=1; i<=100; i++ ))
-	do
-		if [ $i -eq $1 ]
-		then
-			var=${snakeAndLadderArray[$i]}
-			break;
-		elif [ $i -ne $1 -a $i -gt 99 ]
-		then
-			var=$1
-		else
-			true
-		fi
-	done
-	if [ $var -eq 0 ]
-	then
-		echo $1
-	else
-		echo $var
-	fi
+   do
+      if [ $i -eq $1 ]
+      then
+         var=${snakeAndLadderArray[$i]}
+         break;
+      elif [ $i -ne $1 -a $i -gt 99 ]
+      then
+         var=$1
+      else
+         true
+      fi
+
+done
+   if [ $var -eq 0 ]
+   then
+      echo $1
+   else
+      echo $var
+   fi
 }
+function getplayerPosition()
+{
+  local player_position=$(($2+$1))
+   if [ $player_position -gt 100 ]
+   then
+     local player_position=$(($player_position-$1))
+   fi
+   echo $player_position
+}
+function gameStatusDisplay()
+{
+if [ $1 -lt $2 ]
+   then
+      echo "CONGRATS..!! YOU GOT LADDER.."
+   elif [ $1 -gt $2 ]
+   then
+echo "OOPS..!! YOU GOT SNAKE.."
+   else
+      echo "YOU ARE ON NO PLAY.."
+   fi
 
+   echo "Player position is:" $2
 
-while [ $playerPosition -ne 100 ]
+}
+while [ $player1Position -ne 100 ]
 do
-	value=$( rollDie )
-	echo "value of dice :" $value
-	playerPosition=$(($playerPosition+$value))
-	if [ $playerPosition -gt 100 ]
-	then
-		playerPosition=$(($playerPosition-$value))
-	fi
-
-	tempPlayerPosition=$playerPosition
-	playerPosition=$( snakeOrLadderOrNoPlay $playerPosition )
-
-	if [ $tempPlayerPosition -lt $playerPosition ]
-	then
-		echo "CONGRATS..!! YOU GOT LADDER.."
-	elif [ $tempPlayerPosition -gt $playerPosition ]
-	then
-		echo "OOPS..!! YOU GOT SNAKE.."
-	else
-		echo "YOU ARE ON NO PLAY.."
-	fi
-
-	echo "Player position is:" $playerPosition
-	read -s -n 1 key
-		((counterForDiceTossed++))
-
-	if [ $playerPosition -eq 100 ]
+   value=$( rollDie )
+   echo "value of dice :" $value
+   player1Position=$(getplayerPosition $value $player1Position )
+   tempPlayer1Position=$player1Position
+   player1Position=$( snakeOrLadderOrNoPlay $tempPlayer1Position )
+   gameStatusDisplay $tempPlayer1Position $player1Position
+   read -s -n 1 key
+      ((counterForDiceTossed++))
+   if [ $player1Position -eq 100 ]
    then
       echo "YOU WIN"
    fi
 done
-
 echo "Number of times Dice was tossed is:" $counterForDiceTossed
+
