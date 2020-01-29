@@ -26,7 +26,6 @@ snakeAndLadderArray[56]=53;
 snakeAndLadderArray[64]=60;
 snakeAndLadderArray[93]=73;
 snakeAndLadderArray[98]=78;
-
 function rollDie(){
    echo $((RANDOM%6+1))
 }
