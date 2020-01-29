@@ -7,6 +7,7 @@ do
 done
 playerPosition=0
 var=0
+counterForDiceTossed=0
 snakeAndLadderArray[1]=38;
 snakeAndLadderArray[4]=14;
 snakeAndLadderArray[9]=31;
@@ -77,8 +78,9 @@ do
 		echo "YOU ARE ON NO PLAY.."
 	fi
 
-	echo position is $playerPosition
+	echo "Player position is:" $playerPosition
 	read -s -n 1 key
+		((counterForDiceTossed++))
 
 	if [ $playerPosition -eq 100 ]
    then
@@ -86,4 +88,4 @@ do
    fi
 done
 
-
+echo "Number of times Dice was tossed is:" $counterForDiceTossed
